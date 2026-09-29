@@ -47,9 +47,6 @@ class DroneRaceNode(Node):
         self.current_gate_id = 0
         self.current_pose = PoseStamped()
 
-        # For LAB 3
-        self.goal_idx = 0
-
         # Publishers for markers
         marker_qos = QoSProfile(
             depth=1,
@@ -188,7 +185,8 @@ class DroneRaceNode(Node):
         quat_msg.z = q[2]
         quat_msg.w = q[3]
         return quat_msg
-    
+
+# LAB 3 Markers (Ignore in LAB 2)     
     def draw_gate_markers(self):
         marker_array = MarkerArray()
         # print(f'Drawing {len(self.gates)} gates as markers')
@@ -262,7 +260,8 @@ class DroneRaceNode(Node):
 
         self.pub_gate_markers.publish(marker_array)
         # self.get_logger().info('Published gate markers')
-    
+
+# LAB 3 Trajectories (Ignore in LAB 2)   
     def generate_trajectory_example(self):
         """
         Example to illustrate how to compute a trajectory
@@ -310,6 +309,7 @@ class DroneRaceNode(Node):
 
         self.get_logger().info("Trajectory successfully generated.")
 
+# LAB 3 Trajectories (Ignore in LAB 2)  
     def generate_trajectory(self):
         """
         Generate a trajectory through the sequence of gates
@@ -317,7 +317,7 @@ class DroneRaceNode(Node):
         """
         # Complete the code to create a trajectory that goes through all the gates as fast as possible
 
-        
+# LAB 3 Trajectories (Ignore in LAB 2)          
     def draw_trajectory_markers(
         self,
         deltat: float = 0.1,
@@ -451,11 +451,13 @@ class DroneRaceNode(Node):
         marray.markers.append(dots_marker)
         marray.markers.extend(arrow_markers)
         self.pub_traj_markers.publish(marray)
-    
+
+# LABS 2 & 3 Control mode      
     def position_timer_callback(self):
         self.get_logger().info('position timer callback')
         # Complete this function to publish position commands to follow the trajectory 
-    
+
+# LAB 3 Control mode (Ignore in LAB 2)      
     def velocity_timer_callback(self):
         self.get_logger().info('velocity timer callback')
         # Complete this function to publish velocity commands to follow the trajectory        
@@ -464,6 +466,7 @@ def main(args=None):
     rclpy.init(args=args)
 
     # --- Parse command-line arguments ---
+    # LAB 3 Parameters (Ignore in LAB 2)
     parser = argparse.ArgumentParser(description="Drone Race Trajectory Script")
     parser.add_argument("--no-drone", action="store_true",
                         help="Run without connecting to the drone (for trajectory testing only).")
@@ -480,14 +483,16 @@ def main(args=None):
     filepath = os.path.abspath(filepath)
     success = node.read_gates(filepath)
     if success:
-        node.generate_trajectory_example()
-        # node.generate_trajectory()
         # Republish markers every 2 seconds so RViz always sees them
         node.create_timer(2.0, node.draw_gate_markers)
-        node.create_timer(2.0, node.draw_trajectory_markers)
+        # LAB 3 Trajectories (Ignore in LAB 2) 
+        # node.generate_trajectory_example()
+        # node.generate_trajectory()
+        # node.create_timer(2.0, node.draw_trajectory_markers)
     else:
         node.get_logger().error('Failed to start node due to gates file error')
 
+    # LAB 3 Control modes (Ignore in LAB 2) 
     if not cli_args.no_drone:
         node.start_drone()
         if cli_args.vel_control:
